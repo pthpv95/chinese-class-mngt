@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserRole {
+  TEACHER
+  STUDENT
+}
+
+enum ExerciseType {
+  MCQ
+  FILL_BLANK
+  SHORT_ANSWER
+  AUDIO_RECORDING
+  FILE_UPLOAD
+}
+
+enum SubmissionStatus {
+  PENDING
+  SUBMITTED
+  GRADED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         UserRole @default(STUDENT)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  taughtClasses    Class[]           @relation("ClassTeacher")
+  enrollments      ClassEnrollment[]
+  createdExercises Exercise[]        @relation("ExerciseCreator")
+  submissions      Submission[]
+
+  @@map("users")
+}
+
+model Class {
+  id        String   @id @default(cuid())
+  name      String
+  code      String   @unique @default(cuid())
+  teacherId String   @map("teacher_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  teacher     User              @relation("ClassTeacher", fields: [teacherId], references: [id])
+  enrollments ClassEnrollment[]
+  exercises   Exercise[]
+
+  @@map("classes")
+}
+
+model ClassEnrollment {
+  id         String   @id @default(cuid())
+  classId    String   @map("class_id")
+  studentId  String   @map("student_id")
+  enrolledAt DateTime @default(now()) @map("enrolled_at")
+
+  class   Class @relation(fields: [classId], references: [id], onDelete: Cascade)
+  student User  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, studentId])
+  @@map("class_enrollments")
+}
+
+model Exercise {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  type        ExerciseType
+  content     Json
+  classId     String       @map("class_id")
+  createdById String       @map("created_by_id")
+  dueDate     DateTime?    @map("due_date")
+  published   Boolean      @default(false)
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  class       Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  createdBy   User         @relation("ExerciseCreator", fields: [createdById], references: [id])
+  submissions Submission[]
+
+  @@index([classId])
+  @@index([createdById])
+  @@map("exercises")
+}
+
+model Submission {
+  id               String           @id @default(cuid())
+  exerciseId       String           @map("exercise_id")
+  studentId        String           @map("student_id")
+  status           SubmissionStatus @default(SUBMITTED)
+  textAnswer       String?          @map("text_answer")
+  audioUrl         String?          @map("audio_url")
+  audioDurationSec Int?             @map("audio_duration_sec")
+  score            Int?
+  maxScore         Int?             @map("max_score")
+  teacherComment   String?          @map("teacher_comment")
+  gradedAt         DateTime?        @map("graded_at")
+  submittedAt      DateTime         @default(now()) @map("submitted_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  exercise Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  student  User     @relation(fields: [studentId], references: [id])
+
+  @@unique([exerciseId, studentId])
+  @@index([exerciseId])
+  @@index([studentId])
+  @@map("submissions")
+}
