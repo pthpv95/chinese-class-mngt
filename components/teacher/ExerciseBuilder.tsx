@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -28,10 +28,12 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
   const [content, setContent] = useState<Record<string, unknown>>({})
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const publishIntent = useRef(false)
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<BaseForm>({
     resolver: zodResolver(baseSchema),
@@ -51,7 +53,7 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
     const res = await fetch("/api/exercises", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...data, content }),
+      body: JSON.stringify({ ...data, published: publishIntent.current, content }),
     })
     const json = (await res.json()) as { error?: string; data?: { id: string } }
     if (!res.ok) {
@@ -124,6 +126,7 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
                 type="button"
                 onClick={() => {
                   setSelectedType(opt.value)
+                  setValue("type", opt.value)
                   setContent({})
                 }}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
@@ -136,7 +139,7 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
               </button>
             ))}
           </div>
-          <input type="hidden" {...register("type")} value={selectedType} />
+          <input type="hidden" {...register("type")} />
         </div>
       </div>
 
@@ -155,8 +158,12 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
 
       <div className="flex items-center gap-4">
         <button
-          type="submit"
+          type="button"
           disabled={submitting}
+          onClick={() => {
+            publishIntent.current = true
+            void handleSubmit(onSubmit)()
+          }}
           className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
         >
           {submitting ? "Saving..." : "Publish exercise"}
@@ -165,14 +172,8 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
           type="button"
           disabled={submitting}
           onClick={() => {
-            const form = document.querySelector("form")
-            if (form) {
-              const hiddenPublished = form.querySelector<HTMLInputElement>(
-                'input[name="published"]'
-              )
-              if (hiddenPublished) hiddenPublished.value = "false"
-              form.requestSubmit()
-            }
+            publishIntent.current = false
+            void handleSubmit(onSubmit)()
           }}
           className="px-5 py-2.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium rounded-lg transition-colors"
         >
