@@ -68,21 +68,23 @@ export default async function StudentDashboard() {
                   <Link
                     key={ex.id}
                     href={`/student/exercises/${ex.id}`}
-                    className="flex items-center gap-4 px-4 py-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
+                    className="flex items-start sm:items-center gap-3 sm:gap-4 px-3 py-3 sm:px-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
                   >
-                    {/* Type + Title */}
-                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                    {/* Type badge — vertically centred with first line on mobile */}
+                    <div className="pt-0.5 sm:pt-0 flex-shrink-0">
                       <ExerciseBadge type={ex.type as ExerciseType} />
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                          {ex.title}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-0.5">{ex.class.name}</p>
-                      </div>
+                    </div>
+
+                    {/* Title + class */}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                        {ex.title}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">{ex.class.name}</p>
                     </div>
 
                     {/* Right side */}
-                    <div className="flex items-center gap-3 flex-shrink-0">
+                    <div className="flex flex-col items-end sm:flex-row sm:items-center gap-1.5 sm:gap-3 flex-shrink-0">
                       {isGraded && submission?.score !== null && submission?.score !== undefined && (
                         <span className="text-sm font-semibold text-green-600 dark:text-green-400">
                           {submission.score}/100

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import type { FillBlankContent } from "@/lib/types"
 
@@ -18,11 +18,11 @@ export function FillBlankExercise({
   readonly,
 }: FillBlankExerciseProps) {
   const router = useRouter()
+  const [, startTransition] = useTransition()
   const blankCount = (content.template.match(/___/g) ?? []).length
-  const parsedAnswers: string[] = existingAnswer
-    ? (JSON.parse(existingAnswer) as string[])
-    : Array(blankCount).fill("")
-  const [answers, setAnswers] = useState<string[]>(parsedAnswers)
+  const [answers, setAnswers] = useState<string[]>(() =>
+    existingAnswer ? (JSON.parse(existingAnswer) as string[]) : Array(blankCount).fill("")
+  )
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(!!existingAnswer)
 
@@ -37,7 +37,7 @@ export function FillBlankExercise({
     })
     setSubmitted(true)
     setSubmitting(false)
-    router.refresh()
+    startTransition(() => router.refresh())
   }
 
   return (

@@ -11,6 +11,19 @@ export const CreateExerciseSchema = z.object({
   classId: z.string().min(1),
   dueDate: z.string().optional(),
   content: z.record(z.string(), z.unknown()),
+}).superRefine((data, ctx) => {
+  if (data.type === "MCQ") {
+    const questions = (data.content as { questions?: unknown[] }).questions
+    if (!Array.isArray(questions) || questions.length === 0) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["content"], message: "Add at least one question" })
+    }
+  }
+  if (data.type === "FILL_BLANK") {
+    const template = (data.content as { template?: string }).template
+    if (!template || !template.includes("___")) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["content"], message: "Template must contain at least one blank (___)" })
+    }
+  }
 })
 
 export const UpdateExerciseSchema = CreateExerciseSchema.partial().extend({

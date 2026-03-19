@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import type { McqContent } from "@/lib/types"
 
@@ -18,8 +18,10 @@ export function McqExercise({
   readonly,
 }: McqExerciseProps) {
   const router = useRouter()
-  const parsedAnswers: number[] = existingAnswer ? (JSON.parse(existingAnswer) as number[]) : []
-  const [selected, setSelected] = useState<number[]>(parsedAnswers)
+  const [, startTransition] = useTransition()
+  const [selected, setSelected] = useState<number[]>(() =>
+    existingAnswer ? (JSON.parse(existingAnswer) as number[]) : []
+  )
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(!!existingAnswer)
 
@@ -32,7 +34,11 @@ export function McqExercise({
     })
     setSubmitted(true)
     setSubmitting(false)
-    router.refresh()
+    startTransition(() => router.refresh())
+  }
+
+  if (!content?.questions?.length) {
+    return <p className="text-sm text-gray-400">No questions have been added to this exercise yet.</p>
   }
 
   return (
@@ -52,11 +58,10 @@ export function McqExercise({
                   next[qi] = oi
                   setSelected(next)
                 }}
-                className={`w-full text-left px-4 py-3 rounded-lg border text-sm transition-colors ${
-                  selected[qi] === oi
+                className={`w-full text-left px-4 py-3 rounded-lg border text-sm transition-colors ${selected[qi] === oi
                     ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
                     : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 text-gray-700 dark:text-gray-300"
-                } disabled:cursor-not-allowed`}
+                  } disabled:cursor-not-allowed`}
               >
                 {opt}
               </button>

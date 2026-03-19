@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { useAudioRecorder } from "@/hooks/useAudioRecorder"
 import { uploadAudio, formatDuration } from "@/lib/audio-upload"
@@ -22,6 +22,7 @@ export function AudioRecorderExercise({
   readonly,
 }: AudioRecorderExerciseProps) {
   const router = useRouter()
+  const [, startTransition] = useTransition()
   const { state, durationSec, audioBlob, audioUrl, startRecording, stopRecording, reset, error } =
     useAudioRecorder(content.maxDurationSec)
 
@@ -62,7 +63,7 @@ export function AudioRecorderExercise({
         }),
       })
       setSubmitted(true)
-      router.refresh()
+      startTransition(() => router.refresh())
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : "Upload failed")
     } finally {

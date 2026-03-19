@@ -40,13 +40,13 @@ export default async function ExercisePage({ params }: { params: { id: string } 
 
   return (
     <div className="max-w-2xl">
-      <div className="mb-6">
+      <div className="mb-5 sm:mb-6">
         <p className="text-xs text-gray-500 mb-1">{exercise.class.name}</p>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{exercise.title}</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">{exercise.title}</h2>
       </div>
 
       {isGraded && submission && (
-        <div className="mb-6 p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+        <div className="mb-5 sm:mb-6 p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
           <p className="text-sm font-medium text-green-800 dark:text-green-300">
             Graded: {submission.score}/100
           </p>
@@ -58,7 +58,7 @@ export default async function ExercisePage({ params }: { params: { id: string } 
         </div>
       )}
 
-      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4 sm:p-6">
         {exercise.type === "MCQ" && (
           <McqExercise
             exerciseId={exercise.id}

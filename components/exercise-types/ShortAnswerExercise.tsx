@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import type { ShortAnswerContent } from "@/lib/types"
 
@@ -18,6 +18,7 @@ export function ShortAnswerExercise({
   readonly,
 }: ShortAnswerExerciseProps) {
   const router = useRouter()
+  const [, startTransition] = useTransition()
   const [answer, setAnswer] = useState(existingAnswer ?? "")
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(!!existingAnswer)
@@ -31,7 +32,7 @@ export function ShortAnswerExercise({
     })
     setSubmitted(true)
     setSubmitting(false)
-    router.refresh()
+    startTransition(() => router.refresh())
   }
 
   return (
