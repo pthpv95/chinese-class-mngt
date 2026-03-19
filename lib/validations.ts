@@ -34,9 +34,15 @@ export const JoinClassSchema = z.object({
   code: z.string().min(1),
 })
 
+const ALLOWED_AUDIO_TYPES = ["audio/webm", "audio/mp4", "audio/wav", "audio/mpeg", "audio/ogg"]
+
 export const AudioUploadSchema = z.object({
   exerciseId: z.string().min(1),
   studentId: z.string().min(1),
-  mimeType: z.enum(["audio/webm", "audio/mp4", "audio/wav", "audio/mpeg", "audio/ogg"]),
+  // Accept codec-qualified types like "audio/webm;codecs=pcm" — validate on base type only
+  mimeType: z.string().refine(
+    (v) => ALLOWED_AUDIO_TYPES.some((t) => v === t || v.startsWith(t + ";")),
+    { message: `Must be one of: ${ALLOWED_AUDIO_TYPES.join(", ")}` }
+  ),
   fileSizeBytes: z.number().int().positive().max(20 * 1024 * 1024), // 20MB max
 })

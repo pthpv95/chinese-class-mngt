@@ -24,10 +24,12 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const ext = parsed.data.mimeType.split("/")[1] ?? "webm"
+    // Strip codec parameters (e.g. "audio/webm;codecs=pcm" → "audio/webm") for S3 ContentType
+    const baseMimeType = parsed.data.mimeType.split(";")[0] ?? parsed.data.mimeType
+    const ext = baseMimeType.split("/")[1] ?? "webm"
     const filePath = `audio/${parsed.data.exerciseId}/${session.user.id}/${Date.now()}.${ext}`
 
-    const { signedUrl } = await createPresignedUploadUrl(filePath, parsed.data.mimeType)
+    const { signedUrl } = await createPresignedUploadUrl(filePath, baseMimeType)
 
     return NextResponse.json({ data: { signedUrl, filePath } })
   } catch (error) {
