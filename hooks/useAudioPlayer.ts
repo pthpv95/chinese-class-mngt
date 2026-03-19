@@ -27,10 +27,12 @@ export function useAudioPlayer(
     if (!containerRef.current || !audioUrl) return
 
     let ws: WaveSurferInstance | undefined
+    let aborted = false
 
     async function init() {
       if (!containerRef.current) return
       const WaveSurfer = (await import("wavesurfer.js")).default
+      if (aborted) return
       ws = WaveSurfer.create({
         container: containerRef.current,
         waveColor: "#93c5fd",
@@ -57,6 +59,7 @@ export function useAudioPlayer(
 
     void init()
     return () => {
+      aborted = true
       ws?.destroy()
       wavesurferRef.current = null
       setReady(false)

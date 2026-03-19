@@ -35,7 +35,7 @@ export const UpdateExerciseSchema = ExerciseBaseSchema.partial().extend({
 export const CreateSubmissionSchema = z.object({
   exerciseId: z.string().min(1),
   textAnswer: z.string().optional(),
-  audioUrl: z.string().url().optional(),
+  audioUrl: z.string().min(1).optional(),
   audioDurationSec: z.number().int().positive().optional(),
 })
 

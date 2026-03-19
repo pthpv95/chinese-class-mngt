@@ -53,15 +53,19 @@ export function AudioRecorderExercise({
     setUploadError(null)
     try {
       const { publicUrl } = await uploadAudio(activeBlob, exerciseId, studentId)
-      await fetch("/api/submissions", {
+      const res = await fetch("/api/submissions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           exerciseId,
           audioUrl: publicUrl,
-          audioDurationSec: durationSec || Math.round(activeBlob.size / 16000),
+          audioDurationSec: Math.max(1, durationSec || Math.round(activeBlob.size / 16000)),
         }),
       })
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}))
+        throw new Error(json?.error ? JSON.stringify(json.error) : `Server error ${res.status}`)
+      }
       setSubmitted(true)
       startTransition(() => router.refresh())
     } catch (err) {

@@ -1,6 +1,7 @@
 import { requireStudent } from "@/lib/auth-helpers"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
+import { createPresignedDownloadUrl } from "@/lib/storage"
 import { McqExercise } from "@/components/exercise-types/McqExercise"
 import { FillBlankExercise } from "@/components/exercise-types/FillBlankExercise"
 import { ShortAnswerExercise } from "@/components/exercise-types/ShortAnswerExercise"
@@ -37,6 +38,10 @@ export default async function ExercisePage({ params }: { params: { id: string } 
 
   const submission = exercise.submissions[0] ?? null
   const isGraded = submission?.status === "GRADED"
+
+  const existingAudioUrl = submission?.audioUrl
+    ? await createPresignedDownloadUrl(submission.audioUrl).catch(() => null)
+    : null
 
   return (
     <div className="max-w-2xl">
@@ -88,7 +93,7 @@ export default async function ExercisePage({ params }: { params: { id: string } 
             exerciseId={exercise.id}
             studentId={session.user.id}
             content={exercise.content as unknown as AudioRecordingContent}
-            existingAudioUrl={submission?.audioUrl ?? null}
+            existingAudioUrl={existingAudioUrl}
             readonly={isGraded ?? false}
           />
         )}

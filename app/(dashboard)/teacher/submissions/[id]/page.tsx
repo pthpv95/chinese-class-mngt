@@ -2,6 +2,7 @@ import { requireTeacher } from "@/lib/auth-helpers"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import { SubmissionReviewer } from "@/components/teacher/SubmissionReviewer"
+import { createPresignedDownloadUrl } from "@/lib/storage"
 import type { ExerciseType } from "@/lib/types"
 
 export default async function SubmissionReviewPage({ params }: { params: { id: string } }) {
@@ -19,6 +20,10 @@ export default async function SubmissionReviewPage({ params }: { params: { id: s
 
   if (!submission || submission.exercise.createdById !== session.user.id) notFound()
 
+  const audioUrl = submission.audioUrl
+    ? await createPresignedDownloadUrl(submission.audioUrl).catch(() => null)
+    : null
+
   return (
     <div className="max-w-2xl">
       <div className="mb-6">
@@ -31,7 +36,7 @@ export default async function SubmissionReviewPage({ params }: { params: { id: s
         submissionId={submission.id}
         exerciseType={submission.exercise.type as ExerciseType}
         textAnswer={submission.textAnswer}
-        audioUrl={submission.audioUrl}
+        audioUrl={audioUrl}
         audioDurationSec={submission.audioDurationSec}
         content={submission.exercise.content as Record<string, unknown>}
         currentScore={submission.score}
