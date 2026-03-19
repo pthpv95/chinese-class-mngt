@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { ExerciseBadge } from "@/components/ui/ExerciseBadge"
 import { DueDateCountdown } from "@/components/ui/DueDateCountdown"
-import { formatDate } from "@/lib/utils"
+import { groupByCreatedAt } from "@/lib/utils"
 import type { ExerciseType, SubmissionStatus } from "@/lib/types"
 
 export const metadata = { title: "My Exercises — EduFlow" }
@@ -23,95 +23,81 @@ export default async function StudentDashboard() {
         select: { id: true, status: true, score: true },
       },
     },
-    orderBy: { dueDate: "asc" },
+    orderBy: { createdAt: "desc" },
   })
 
-  const pending = exercises.filter(
-    (e) => !e.submissions[0] || e.submissions[0].status === "SUBMITTED"
-  )
-  const completed = exercises.filter((e) => e.submissions[0]?.status === "GRADED")
+  if (exercises.length === 0) {
+    return (
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">My exercises</h2>
+        <div className="text-center py-16 text-gray-500">
+          <p className="text-sm">No exercises yet. Ask your teacher for the class code to join.</p>
+        </div>
+      </div>
+    )
+  }
+
+  const rows = exercises.map((ex) => ({
+    ...ex,
+    createdAt: ex.createdAt.toISOString(),
+  }))
+
+  const groups = groupByCreatedAt(rows)
 
   return (
     <div>
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">My exercises</h2>
 
-      {pending.length === 0 && completed.length === 0 && (
-        <div className="text-center py-16 text-gray-500">
-          <p className="text-sm">
-            No exercises yet. Ask your teacher for the class code to join.
-          </p>
-        </div>
-      )}
+      <div className="space-y-6">
+        {groups.map(({ label, items }) => (
+          <div key={label}>
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">
+                {label}
+              </span>
+              <div className="flex-1 h-px bg-gray-100 dark:bg-gray-800" />
+            </div>
 
-      {pending.length > 0 && (
-        <section className="mb-8">
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3">
-            Pending ({pending.length})
-          </h3>
-          <div className="space-y-3">
-            {pending.map((ex) => (
-              <Link
-                key={ex.id}
-                href={`/student/exercises/${ex.id}`}
-                className="flex items-center justify-between p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <ExerciseBadge type={ex.type as ExerciseType} />
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                      {ex.title}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-0.5">{ex.class.name}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 flex-shrink-0">
-                  {ex.dueDate && <DueDateCountdown dueDate={ex.dueDate} />}
-                  <ExerciseBadge
-                    status={(ex.submissions[0]?.status ?? "PENDING") as SubmissionStatus}
-                  />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
+            <div className="space-y-2">
+              {items.map((ex) => {
+                const submission = ex.submissions[0]
+                const status: SubmissionStatus = submission?.status as SubmissionStatus ?? "PENDING"
+                const isGraded = status === "GRADED"
 
-      {completed.length > 0 && (
-        <section>
-          <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3">
-            Graded ({completed.length})
-          </h3>
-          <div className="space-y-3">
-            {completed.map((ex) => (
-              <Link
-                key={ex.id}
-                href={`/student/exercises/${ex.id}`}
-                className="flex items-center justify-between p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <ExerciseBadge type={ex.type as ExerciseType} />
-                  <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                      {ex.title}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {ex.class.name} · {ex.dueDate ? formatDate(ex.dueDate) : "No due date"}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  {ex.submissions[0]?.score !== null && ex.submissions[0]?.score !== undefined && (
-                    <span className="text-sm font-semibold text-green-600 dark:text-green-400">
-                      {ex.submissions[0].score}/100
-                    </span>
-                  )}
-                  <ExerciseBadge status="GRADED" />
-                </div>
-              </Link>
-            ))}
+                return (
+                  <Link
+                    key={ex.id}
+                    href={`/student/exercises/${ex.id}`}
+                    className="flex items-center gap-4 px-4 py-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
+                  >
+                    {/* Type + Title */}
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                      <ExerciseBadge type={ex.type as ExerciseType} />
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                          {ex.title}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-0.5">{ex.class.name}</p>
+                      </div>
+                    </div>
+
+                    {/* Right side */}
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      {isGraded && submission?.score !== null && submission?.score !== undefined && (
+                        <span className="text-sm font-semibold text-green-600 dark:text-green-400">
+                          {submission.score}/100
+                        </span>
+                      )}
+                      {!isGraded && ex.dueDate && <DueDateCountdown dueDate={ex.dueDate} />}
+                      <ExerciseBadge status={status} />
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
           </div>
-        </section>
-      )}
+        ))}
+      </div>
     </div>
   )
 }

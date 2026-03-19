@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { ExerciseBadge } from "@/components/ui/ExerciseBadge"
+import { groupByCreatedAt } from "@/lib/utils"
 import type { ExerciseType } from "@/lib/types"
 
 interface Student {
@@ -38,26 +39,6 @@ function initials(name: string) {
     .slice(0, 2)
 }
 
-function groupByDate(exercises: ExerciseRow[]): { label: string; items: ExerciseRow[] }[] {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const yesterday = new Date(today)
-  yesterday.setDate(yesterday.getDate() - 1)
-
-  const groups = new Map<string, ExerciseRow[]>()
-  for (const ex of exercises) {
-    const d = new Date(ex.createdAt)
-    d.setHours(0, 0, 0, 0)
-    let label: string
-    if (d.getTime() === today.getTime()) label = "Today"
-    else if (d.getTime() === yesterday.getTime()) label = "Yesterday"
-    else
-      label = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
-    if (!groups.has(label)) groups.set(label, [])
-    groups.get(label)!.push(ex)
-  }
-  return Array.from(groups.entries()).map(([label, items]) => ({ label, items }))
-}
 
 function CompletionPopup({
   exercise,
@@ -276,7 +257,7 @@ function ExerciseRow({
 }
 
 export function ExercisesByDate({ exercises, students, classId }: Props) {
-  const groups = groupByDate(exercises)
+  const groups = groupByCreatedAt(exercises)
 
   if (exercises.length === 0) {
     return (

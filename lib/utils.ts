@@ -18,3 +18,25 @@ export function formatDuration(seconds: number): string {
   const s = seconds % 60
   return `${m}:${s.toString().padStart(2, "0")}`
 }
+
+export function groupByCreatedAt<T extends { createdAt: string }>(
+  items: T[]
+): { label: string; items: T[] }[] {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const yesterday = new Date(today)
+  yesterday.setDate(yesterday.getDate() - 1)
+
+  const groups = new Map<string, T[]>()
+  for (const item of items) {
+    const d = new Date(item.createdAt)
+    d.setHours(0, 0, 0, 0)
+    let label: string
+    if (d.getTime() === today.getTime()) label = "Today"
+    else if (d.getTime() === yesterday.getTime()) label = "Yesterday"
+    else label = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
+    if (!groups.has(label)) groups.set(label, [])
+    groups.get(label)!.push(item)
+  }
+  return Array.from(groups.entries()).map(([label, items]) => ({ label, items }))
+}
