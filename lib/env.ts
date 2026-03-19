@@ -5,12 +5,11 @@ function requireEnv(name: string): string {
 }
 
 export const env = {
-  databaseUrl: requireEnv("DATABASE_URL"),
-  nextauthSecret: requireEnv("NEXTAUTH_SECRET"),
-  s3Bucket: requireEnv("S3_BUCKET"),
-  awsAccessKeyId: requireEnv("AWS_ACCESS_KEY_ID"),
-  awsSecretAccessKey: requireEnv("AWS_SECRET_ACCESS_KEY"),
-  awsRegion: process.env.AWS_REGION ?? "us-east-1",
-  // Optional: set for MinIO / non-AWS S3 endpoints, leave unset for AWS S3
-  s3Endpoint: process.env.S3_ENDPOINT,
+  get databaseUrl() { return requireEnv("DATABASE_URL") },
+  get nextauthSecret() { return requireEnv("NEXTAUTH_SECRET") },
+  get s3Bucket() { return requireEnv("S3_BUCKET") },
+  get awsAccessKeyId() { return requireEnv("AWS_ACCESS_KEY_ID") },
+  get awsSecretAccessKey() { return requireEnv("AWS_SECRET_ACCESS_KEY") },
+  get awsRegion() { return process.env.AWS_REGION ?? "us-east-1" },
+  get s3Endpoint() { return process.env.S3_ENDPOINT },
 } as const
