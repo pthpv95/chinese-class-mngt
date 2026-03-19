@@ -4,14 +4,16 @@ export const CreateClassSchema = z.object({
   name: z.string().min(1).max(100),
 })
 
-export const CreateExerciseSchema = z.object({
+const ExerciseBaseSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().optional(),
   type: z.enum(["MCQ", "FILL_BLANK", "SHORT_ANSWER", "AUDIO_RECORDING", "FILE_UPLOAD"]),
   classId: z.string().min(1),
   dueDate: z.string().optional(),
   content: z.record(z.string(), z.unknown()),
-}).superRefine((data, ctx) => {
+})
+
+export const CreateExerciseSchema = ExerciseBaseSchema.superRefine((data, ctx) => {
   if (data.type === "MCQ") {
     const questions = (data.content as { questions?: unknown[] }).questions
     if (!Array.isArray(questions) || questions.length === 0) {
@@ -26,7 +28,7 @@ export const CreateExerciseSchema = z.object({
   }
 })
 
-export const UpdateExerciseSchema = CreateExerciseSchema.partial().extend({
+export const UpdateExerciseSchema = ExerciseBaseSchema.partial().extend({
   published: z.boolean().optional(),
 })
 
