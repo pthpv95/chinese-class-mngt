@@ -10,17 +10,23 @@ const typeLabels: Record<ExerciseType, string> = {
 }
 
 const typeColors: Record<ExerciseType, string> = {
-  MCQ: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
-  FILL_BLANK: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-  SHORT_ANSWER: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300",
-  AUDIO_RECORDING: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
+  MCQ: "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300",
+  FILL_BLANK: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
+  SHORT_ANSWER: "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300",
+  AUDIO_RECORDING: "bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300",
   FILE_UPLOAD: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
 }
 
 const statusColors: Record<SubmissionStatus, string> = {
-  PENDING: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
-  SUBMITTED: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
-  GRADED: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300",
+  PENDING: "bg-amber-100 text-amber-800",
+  SUBMITTED: "bg-pink-100 text-pink-800",
+  GRADED: "bg-emerald-100 text-emerald-800",
+}
+
+const statusLabels: Record<SubmissionStatus, string> = {
+  PENDING: "PENDING",
+  SUBMITTED: "SUBMITTED",
+  GRADED: "★ Graded",
 }
 
 interface ExerciseBadgeProps {
@@ -52,7 +58,7 @@ export function ExerciseBadge({ type, status, className }: ExerciseBadgeProps) {
           className
         )}
       >
-        {status}
+        {statusLabels[status]}
       </span>
     )
   }

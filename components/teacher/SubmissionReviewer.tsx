@@ -47,7 +47,7 @@ export function SubmissionReviewer({
   return (
     <div className="space-y-6">
       {/* Student answer */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-pink-100 dark:border-gray-800 p-6">
         <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
           Student answer
         </h3>
@@ -75,7 +75,7 @@ export function SubmissionReviewer({
             max={100}
             value={score}
             onChange={(e) => setScore(Number(e.target.value))}
-            className="w-24 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-24 rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400"
           />
         </div>
 
@@ -87,7 +87,7 @@ export function SubmissionReviewer({
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             rows={4}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 resize-none"
             placeholder="Great effort! Consider..."
           />
         </div>
@@ -95,7 +95,7 @@ export function SubmissionReviewer({
         <button
           onClick={handleGrade}
           disabled={submitting}
-          className="px-5 py-2.5 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+          className="px-4 py-2.5 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {submitting ? "Saving..." : status === "GRADED" ? "Update grade" : "Submit grade"}
         </button>
@@ -127,7 +127,7 @@ function AudioPlayer({
         <button
           onClick={togglePlay}
           disabled={!ready}
-          className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white transition-colors"
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-pink-500 hover:bg-pink-600 disabled:opacity-50 text-white transition-colors"
         >
           {playing ? (
             <span className="flex gap-0.5">

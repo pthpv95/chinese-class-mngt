@@ -141,7 +141,7 @@ export function AudioRecorderExercise({
             type="file"
             accept="audio/*"
             onChange={handleFileChange}
-            className="block text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 dark:file:bg-gray-800 dark:file:text-gray-300"
+            className="block text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-pink-100 file:text-pink-700 hover:file:bg-pink-200 dark:file:bg-gray-800 dark:file:text-gray-300"
           />
         </div>
       )}
@@ -151,9 +151,9 @@ export function AudioRecorderExercise({
         <button
           onClick={handleSubmit}
           disabled={uploading}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
+          className="px-4 py-2.5 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {uploading ? "Uploading..." : "Submit recording"}
+          {uploading ? "Uploading..." : "Submit ✓"}
         </button>
       )}
 

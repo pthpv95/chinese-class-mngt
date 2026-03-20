@@ -56,7 +56,7 @@ export function FillBlankExercise({
                   setAnswers(next)
                 }}
                 disabled={readonly || submitted}
-                className="inline-block w-28 mx-1 px-2 py-0.5 border-b-2 border-blue-400 bg-transparent text-blue-700 dark:text-blue-300 text-center text-sm focus:outline-none disabled:opacity-70"
+                className="inline-block w-28 mx-1 px-2 py-0.5 border-b-2 border-pink-400 bg-transparent text-pink-700 dark:text-pink-300 text-center text-sm focus:outline-none disabled:opacity-70"
                 placeholder="..."
               />
             )}
@@ -68,9 +68,9 @@ export function FillBlankExercise({
         <button
           onClick={handleSubmit}
           disabled={submitting || answers.some((a) => !a.trim())}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
+          className="px-4 py-2.5 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {submitting ? "Submitting..." : "Submit"}
+          {submitting ? "Submitting..." : "Submit ✓"}
         </button>
       )}
       {submitted && !readonly && (

@@ -67,14 +67,14 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Basic fields */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-4">
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-pink-100 dark:border-gray-800 p-6 space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
             Title
           </label>
           <input
             {...register("title")}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
             placeholder="e.g. Vocabulary Quiz — Chapter 3"
           />
           {errors.title && (
@@ -89,7 +89,7 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
             </label>
             <select
               {...register("classId")}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
             >
               <option value="">Select class</option>
               {classes.map((c) => (
@@ -110,7 +110,7 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
             <input
               {...register("dueDate")}
               type="datetime-local"
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
             />
           </div>
         </div>
@@ -131,8 +131,8 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
                 }}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
                   selectedType === opt.value
-                    ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-                    : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-gray-300"
+                    ? "border-pink-400 bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300"
+                    : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-pink-300"
                 }`}
               >
                 {opt.label}
@@ -144,7 +144,7 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
       </div>
 
       {/* Dynamic content form */}
-      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-pink-100 dark:border-gray-800 p-6">
         <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
           Exercise content
         </h3>
@@ -164,7 +164,7 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
             publishIntent.current = true
             void handleSubmit(onSubmit)()
           }}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+          className="px-4 py-2.5 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {submitting ? "Saving..." : "Publish exercise"}
         </button>
@@ -175,7 +175,7 @@ export function ExerciseBuilder({ classes, defaultClassId }: ExerciseBuilderProp
             publishIntent.current = false
             void handleSubmit(onSubmit)()
           }}
-          className="px-5 py-2.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm font-medium rounded-lg transition-colors"
+          className="px-4 py-2.5 border border-pink-200 dark:border-gray-700 text-pink-700 dark:text-pink-300 hover:bg-pink-50 dark:hover:bg-gray-800 text-sm font-medium rounded-lg transition-colors"
         >
           Save as draft
         </button>
@@ -207,7 +207,7 @@ function McqBuilder({ onChange }: { onChange: (c: Record<string, unknown>) => vo
               onChange={(e) =>
                 update(questions.map((x, i) => (i === qi ? { ...x, text: e.target.value } : x)))
               }
-              className="flex-1 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
               placeholder="Question text"
             />
           </div>
@@ -220,7 +220,7 @@ function McqBuilder({ onChange }: { onChange: (c: Record<string, unknown>) => vo
                 onChange={() =>
                   update(questions.map((x, i) => (i === qi ? { ...x, answer: oi } : x)))
                 }
-                className="accent-blue-600"
+                className="accent-pink-500"
               />
               <input
                 value={opt}
@@ -229,7 +229,7 @@ function McqBuilder({ onChange }: { onChange: (c: Record<string, unknown>) => vo
                   opts[oi] = e.target.value
                   update(questions.map((x, i) => (i === qi ? { ...x, options: opts } : x)))
                 }}
-                className="flex-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
                 placeholder={`Option ${oi + 1}`}
               />
             </div>
@@ -239,7 +239,7 @@ function McqBuilder({ onChange }: { onChange: (c: Record<string, unknown>) => vo
       <button
         type="button"
         onClick={() => update([...questions, { text: "", options: ["", "", "", ""], answer: 0 }])}
-        className="text-sm text-blue-600 hover:underline"
+        className="text-sm text-pink-600 hover:underline"
       >
         + Add question
       </button>
@@ -268,7 +268,7 @@ function FillBlankBuilder({ onChange }: { onChange: (c: Record<string, unknown>)
           value={template}
           onChange={(e) => handleTemplate(e.target.value)}
           rows={3}
-          className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
           placeholder="She ___ to school every day. They ___ football now."
         />
       </div>
@@ -283,7 +283,7 @@ function FillBlankBuilder({ onChange }: { onChange: (c: Record<string, unknown>)
               setAnswers(next)
               onChange({ template, answers: next })
             }}
-            className="mt-1 w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
             placeholder="Correct answer"
           />
         </div>
@@ -306,7 +306,7 @@ function ShortAnswerBuilder({ onChange }: { onChange: (c: Record<string, unknown
             onChange({ prompt: e.target.value, sampleAnswer: sample })
           }}
           rows={3}
-          className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
           placeholder="Describe what students should write about..."
         />
       </div>
@@ -321,7 +321,7 @@ function ShortAnswerBuilder({ onChange }: { onChange: (c: Record<string, unknown
             onChange({ prompt, sampleAnswer: e.target.value })
           }}
           rows={2}
-          className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
           placeholder="Model answer for your reference..."
         />
       </div>
@@ -351,7 +351,7 @@ function AudioBuilder({ onChange }: { onChange: (c: Record<string, unknown>) => 
             update(e.target.value)
           }}
           rows={3}
-          className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
           placeholder="Please record yourself saying the following..."
         />
       </div>
@@ -369,7 +369,7 @@ function AudioBuilder({ onChange }: { onChange: (c: Record<string, unknown>) => 
             }}
             min={10}
             max={300}
-            className="w-24 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-24 rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
           />
         </div>
         <div className="flex items-center gap-2 mt-4">
@@ -381,7 +381,7 @@ function AudioBuilder({ onChange }: { onChange: (c: Record<string, unknown>) => 
               setAllowUpload(e.target.checked)
               update(prompt, maxDuration, e.target.checked)
             }}
-            className="accent-blue-600"
+            className="accent-pink-500"
           />
           <label htmlFor="allowUpload" className="text-sm text-gray-700 dark:text-gray-300">
             Allow file upload

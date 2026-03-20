@@ -31,7 +31,7 @@ export default async function StudentDashboard() {
       <div>
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">My exercises</h2>
         <div className="text-center py-16 text-gray-500">
-          <p className="text-sm">No exercises yet. Ask your teacher for the class code to join.</p>
+          <p className="text-sm">No exercises yet ✨ — ask your teacher for the class code to get started</p>
         </div>
       </div>
     )
@@ -68,7 +68,7 @@ export default async function StudentDashboard() {
                   <Link
                     key={ex.id}
                     href={`/student/exercises/${ex.id}`}
-                    className="flex items-start sm:items-center gap-3 sm:gap-4 px-3 py-3 sm:px-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
+                    className="flex items-start sm:items-center gap-3 sm:gap-4 px-3 py-3 sm:px-4 bg-white dark:bg-gray-900 rounded-xl border border-pink-100 dark:border-gray-800 hover:border-pink-300 dark:hover:border-pink-700 transition-colors group"
                   >
                     {/* Type badge — vertically centred with first line on mobile */}
                     <div className="pt-0.5 sm:pt-0 flex-shrink-0">
@@ -77,7 +77,7 @@ export default async function StudentDashboard() {
 
                     {/* Title + class */}
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-pink-600 dark:group-hover:text-pink-400">
                         {ex.title}
                       </p>
                       <p className="text-xs text-gray-500 mt-0.5">{ex.class.name}</p>
