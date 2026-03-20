@@ -7,7 +7,7 @@ import { SessionProvider } from "next-auth/react"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "EduFlow — E-Learning Portal",
+  title: "Chinese Learning — E-Learning Portal",
   description: "Homework and exercise management for teachers and students",
 }
 

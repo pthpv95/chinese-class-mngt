@@ -15,6 +15,20 @@ export interface AudioRecorderResult {
   error: string | null
 }
 
+function getSupportedMimeType(): string {
+  if (typeof MediaRecorder === "undefined") return "audio/mp4"
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/ogg;codecs=opus",
+  ]
+  for (const type of candidates) {
+    if (MediaRecorder.isTypeSupported(type)) return type
+  }
+  return "audio/mp4"
+}
+
 interface RecordRTCInstance {
   startRecording: () => void
   stopRecording: (callback: () => void) => void
@@ -57,7 +71,7 @@ export function useAudioRecorder(maxDurationSec = 120): AudioRecorderResult {
       const RecordRTC = (await import("recordrtc")).default
       const recorder = new RecordRTC(stream, {
         type: "audio",
-        mimeType: "audio/webm;codecs=pcm",
+        mimeType: getSupportedMimeType(),
         timeSlice: 1000,
       })
 
