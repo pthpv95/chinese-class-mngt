@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getApiSession } from "@/lib/auth-helpers"
 import { CreateExerciseSchema } from "@/lib/validations"
 import type { Prisma } from "@prisma/client"
+import { updateTag } from "next/cache"
 
 export async function GET(req: NextRequest) {
   const session = await getApiSession()
@@ -73,6 +74,9 @@ export async function POST(req: NextRequest) {
         dueDate: parsed.data.dueDate ? new Date(parsed.data.dueDate) : null,
       },
     })
+    updateTag(`class-${exercise.classId}`)
+    updateTag(`class-${exercise.classId}-exercises`)
+    updateTag(`teacher-classes-${session.user.id}`)
     return NextResponse.json({ data: exercise }, { status: 201 })
   } catch (error) {
     console.error("[POST /api/exercises]", error)

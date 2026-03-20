@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getApiSession } from "@/lib/auth-helpers"
 import { CreateSubmissionSchema } from "@/lib/validations"
+import { updateTag } from "next/cache"
 
 export async function GET(req: NextRequest) {
   const session = await getApiSession()
@@ -52,6 +53,7 @@ export async function POST(req: NextRequest) {
   try {
     const exercise = await prisma.exercise.findUnique({
       where: { id: parsed.data.exerciseId, published: true },
+      select: { id: true, classId: true, createdById: true },
     })
     if (!exercise) {
       return NextResponse.json({ error: "Exercise not found" }, { status: 404 })
@@ -79,6 +81,9 @@ export async function POST(req: NextRequest) {
         audioDurationSec: parsed.data.audioDurationSec ?? null,
       },
     })
+    updateTag(`student-exercises-${session.user.id}`)
+    updateTag(`class-${exercise.classId}`)
+    updateTag(`teacher-classes-${exercise.createdById}`)
     return NextResponse.json({ data: submission }, { status: 201 })
   } catch (error) {
     console.error("[POST /api/submissions]", error)

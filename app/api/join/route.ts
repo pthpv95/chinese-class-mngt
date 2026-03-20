@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
+import { updateTag } from "next/cache"
 
 const RegisterAndJoinSchema = z.object({
   code: z.string().min(1),
@@ -41,5 +42,8 @@ export async function POST(req: NextRequest) {
     data: { classId: cls.id, studentId: user.id },
   })
 
+  updateTag(`class-${cls.id}`)
+  updateTag(`student-exercises-${user.id}`)
+  updateTag(`teacher-classes-${cls.teacherId}`)
   return NextResponse.json({ ok: true })
 }

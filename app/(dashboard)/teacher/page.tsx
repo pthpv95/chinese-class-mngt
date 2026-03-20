@@ -1,27 +1,13 @@
 import { requireTeacher } from "@/lib/auth-helpers"
-import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { CreateClassForm } from "./CreateClassForm"
+import { getTeacherDashboard } from "@/lib/data"
 
 export const metadata = { title: "Teacher Dashboard — EduFlow" }
 
 export default async function TeacherDashboard() {
   const session = await requireTeacher()
-
-  const classes = await prisma.class.findMany({
-    where: { teacherId: session.user.id },
-    include: {
-      _count: { select: { enrollments: true, exercises: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  })
-
-  const pendingGrading = await prisma.submission.count({
-    where: {
-      status: "SUBMITTED",
-      exercise: { createdById: session.user.id },
-    },
-  })
+  const { classes, pendingGrading } = await getTeacherDashboard(session.user.id)
 
   return (
     <div>

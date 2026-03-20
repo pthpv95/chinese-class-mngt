@@ -1,29 +1,15 @@
 import { requireTeacher } from "@/lib/auth-helpers"
-import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ExercisesByDate } from "@/components/teacher/ExercisesByDate"
 import { CopyInviteLinkButton } from "./CopyInviteLinkButton"
+import { getClassDetail } from "@/lib/data"
 
 export default async function ClassDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const session = await requireTeacher()
 
-  const cls = await prisma.class.findFirst({
-    where: { id, teacherId: session.user.id },
-    include: {
-      enrollments: {
-        include: { student: { select: { id: true, name: true, email: true } } },
-        orderBy: { enrolledAt: "asc" },
-      },
-      exercises: {
-        include: {
-          submissions: { select: { studentId: true, status: true } },
-        },
-        orderBy: { createdAt: "desc" },
-      },
-    },
-  })
+  const cls = await getClassDetail(id, session.user.id)
 
   if (!cls) notFound()
 

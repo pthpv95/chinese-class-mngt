@@ -1,6 +1,6 @@
 import { requireStudent } from "@/lib/auth-helpers"
-import { prisma } from "@/lib/prisma"
 import Link from "next/link"
+import { getStudentExercises } from "@/lib/data"
 import { ExerciseBadge } from "@/components/ui/ExerciseBadge"
 import { DueDateCountdown } from "@/components/ui/DueDateCountdown"
 import { groupByCreatedAt } from "@/lib/utils"
@@ -11,30 +11,7 @@ export const metadata = { title: "My Exercises — EduFlow" }
 export default async function StudentDashboard() {
   const session = await requireStudent()
 
-  const enrollments = await prisma.classEnrollment.findMany({
-    where: { studentId: session.user.id },
-    select: { classId: true, enrolledAt: true },
-  })
-
-  const classFilters = enrollments.map((e) => ({
-    classId: e.classId,
-    createdAt: { gte: e.enrolledAt },
-  }))
-
-  const exercises = await prisma.exercise.findMany({
-    where: {
-      published: true,
-      OR: classFilters.length > 0 ? classFilters : [{ id: "" }],
-    },
-    include: {
-      class: { select: { name: true } },
-      submissions: {
-        where: { studentId: session.user.id },
-        select: { id: true, status: true, score: true },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  })
+  const exercises = await getStudentExercises(session.user.id)
 
   if (exercises.length === 0) {
     return (

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { getApiSession } from "@/lib/auth-helpers"
 import { UpdateExerciseSchema } from "@/lib/validations"
 import type { Prisma } from "@prisma/client"
+import { updateTag } from "next/cache"
 
 export async function GET(
   _req: NextRequest,
@@ -61,6 +62,8 @@ export async function PATCH(
         ...(parsed.data.dueDate !== undefined ? { dueDate: new Date(parsed.data.dueDate) } : {}),
       },
     })
+    updateTag(`class-${exercise.classId}`)
+    updateTag(`class-${exercise.classId}-exercises`)
     return NextResponse.json({ data: updated })
   } catch (error) {
     console.error("[PATCH /api/exercises/:id]", error)
@@ -85,6 +88,9 @@ export async function DELETE(
     }
 
     await prisma.exercise.delete({ where: { id } })
+    updateTag(`class-${exercise.classId}`)
+    updateTag(`class-${exercise.classId}-exercises`)
+    updateTag(`teacher-classes-${session.user.id}`)
     return NextResponse.json({ data: { success: true } })
   } catch (error) {
     console.error("[DELETE /api/exercises/:id]", error)
