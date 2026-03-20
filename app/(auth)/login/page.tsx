@@ -1,7 +1,7 @@
 "use client"
 
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -16,6 +16,8 @@ type LoginForm = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get("callbackUrl")
   const [error, setError] = useState<string | null>(null)
 
   const {
@@ -37,6 +39,10 @@ export default function LoginPage() {
       return
     }
 
+    if (callbackUrl) {
+      router.push(callbackUrl)
+      return
+    }
     // Fetch session to get role for redirect
     const res = await fetch("/api/auth/session")
     const session = await res.json() as { user?: { role?: string } }

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ExercisesByDate } from "@/components/teacher/ExercisesByDate"
+import { CopyInviteLinkButton } from "./CopyInviteLinkButton"
 
 export default async function ClassDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -53,6 +54,9 @@ export default async function ClassDetailPage({ params }: { params: Promise<{ id
             Invite code:{" "}
             <span className="font-mono bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-gray-900 dark:text-white text-xs">
               {cls.code}
+            </span>
+            <span className="ml-2">
+              <CopyInviteLinkButton code={cls.code} />
             </span>
             <span className="ml-3 text-gray-400">·</span>
             <span className="ml-3 text-gray-400">{students.length} student{students.length !== 1 ? "s" : ""}</span>
