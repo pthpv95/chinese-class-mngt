@@ -93,7 +93,7 @@ describe("PATCH /api/submissions/[id]", () => {
         method: "PATCH",
         body: JSON.stringify({ score: 90, teacherComment: "Good work" }),
       }),
-      { params: { id: "sub-1" } }
+      { params: Promise.resolve({ id: "sub-1" }) }
     )
     expect(res.status).toBe(200)
     const json = (await res.json()) as { data: { score: number } }
@@ -107,7 +107,7 @@ describe("PATCH /api/submissions/[id]", () => {
         method: "PATCH",
         body: JSON.stringify({ score: 90 }),
       }),
-      { params: { id: "sub-1" } }
+      { params: Promise.resolve({ id: "sub-1" }) }
     )
     expect(res.status).toBe(403)
   })

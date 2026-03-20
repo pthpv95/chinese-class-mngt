@@ -5,11 +5,12 @@ import { SubmissionReviewer } from "@/components/teacher/SubmissionReviewer"
 import { createPresignedDownloadUrl } from "@/lib/storage"
 import type { ExerciseType } from "@/lib/types"
 
-export default async function SubmissionReviewPage({ params }: { params: { id: string } }) {
+export default async function SubmissionReviewPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await requireTeacher()
 
   const submission = await prisma.submission.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       student: { select: { id: true, name: true, email: true } },
       exercise: {

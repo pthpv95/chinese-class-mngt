@@ -6,14 +6,15 @@ import type { Prisma } from "@prisma/client"
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await getApiSession()
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   try {
     const exercise = await prisma.exercise.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { class: { select: { name: true } } },
     })
     if (!exercise) return NextResponse.json({ error: "Not found" }, { status: 404 })
@@ -29,8 +30,9 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await getApiSession("TEACHER")
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
 
@@ -42,14 +44,14 @@ export async function PATCH(
 
   try {
     const exercise = await prisma.exercise.findFirst({
-      where: { id: params.id, createdById: session.user.id },
+      where: { id, createdById: session.user.id },
     })
     if (!exercise) {
       return NextResponse.json({ error: "Not found or access denied" }, { status: 404 })
     }
 
     const updated = await prisma.exercise.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(parsed.data.title !== undefined ? { title: parsed.data.title } : {}),
         ...(parsed.data.type !== undefined ? { type: parsed.data.type } : {}),
@@ -68,20 +70,21 @@ export async function PATCH(
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await getApiSession("TEACHER")
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
 
   try {
     const exercise = await prisma.exercise.findFirst({
-      where: { id: params.id, createdById: session.user.id },
+      where: { id, createdById: session.user.id },
     })
     if (!exercise) {
       return NextResponse.json({ error: "Not found or access denied" }, { status: 404 })
     }
 
-    await prisma.exercise.delete({ where: { id: params.id } })
+    await prisma.exercise.delete({ where: { id } })
     return NextResponse.json({ data: { success: true } })
   } catch (error) {
     console.error("[DELETE /api/exercises/:id]", error)

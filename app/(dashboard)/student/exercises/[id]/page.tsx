@@ -13,11 +13,12 @@ import type {
   AudioRecordingContent,
 } from "@/lib/types"
 
-export default async function ExercisePage({ params }: { params: { id: string } }) {
+export default async function ExercisePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await requireStudent()
 
   const exercise = await prisma.exercise.findUnique({
-    where: { id: params.id, published: true },
+    where: { id, published: true },
     include: {
       class: { select: { name: true } },
       submissions: {

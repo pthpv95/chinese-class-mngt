@@ -9,10 +9,10 @@ import type { ExerciseType } from "@/lib/types"
 export default async function SubmissionsListPage({
   searchParams,
 }: {
-  searchParams: { exerciseId?: string }
+  searchParams: Promise<{ exerciseId?: string }>
 }) {
   const session = await requireTeacher()
-  const { exerciseId } = searchParams
+  const { exerciseId } = await searchParams
 
   if (!exerciseId) notFound()
 

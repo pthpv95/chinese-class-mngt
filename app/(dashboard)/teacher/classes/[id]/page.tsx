@@ -4,11 +4,12 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ExercisesByDate } from "@/components/teacher/ExercisesByDate"
 
-export default async function ClassDetailPage({ params }: { params: { id: string } }) {
+export default async function ClassDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await requireTeacher()
 
   const cls = await prisma.class.findFirst({
-    where: { id: params.id, teacherId: session.user.id },
+    where: { id, teacherId: session.user.id },
     include: {
       enrollments: {
         include: { student: { select: { id: true, name: true, email: true } } },

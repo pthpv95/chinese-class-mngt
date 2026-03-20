@@ -1,12 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    // We run ESLint separately via `npm run lint` with ESLint v9 flat config.
-    ignoreDuringBuilds: true,
-  },
-  experimental: {
-    serverActions: { allowedOrigins: ["localhost:3000", process.env.NEXTAUTH_URL ?? ""] },
-  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "*.amazonaws.com" }, // AWS S3

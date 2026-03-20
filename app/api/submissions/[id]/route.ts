@@ -5,14 +5,15 @@ import { GradeSubmissionSchema } from "@/lib/validations"
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await getApiSession()
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   try {
     const submission = await prisma.submission.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         student: { select: { id: true, name: true, email: true } },
         exercise: {
@@ -38,8 +39,9 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   const session = await getApiSession("TEACHER")
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 })
 
@@ -51,7 +53,7 @@ export async function PATCH(
 
   try {
     const submission = await prisma.submission.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { exercise: { select: { createdById: true } } },
     })
     if (!submission || submission.exercise.createdById !== session.user.id) {
@@ -59,7 +61,7 @@ export async function PATCH(
     }
 
     const updated = await prisma.submission.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         score: parsed.data.score,
         maxScore: parsed.data.maxScore ?? null,
