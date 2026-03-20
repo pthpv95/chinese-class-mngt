@@ -4,7 +4,7 @@ const nextConfig = {
     prefetchInlining: true,
     useCache: true,
     staleTimes: {
-      dynamic: 30,  // cache dynamic pages for 30s in the client router cache
+      dynamic: 60,  // cache dynamic pages for 30s in the client router cache
       static: 300,  // cache static pages for 5min
     },
   },
