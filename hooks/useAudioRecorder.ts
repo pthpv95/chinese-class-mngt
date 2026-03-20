@@ -15,18 +15,20 @@ export interface AudioRecorderResult {
   error: string | null
 }
 
-function getSupportedMimeType(): string {
-  if (typeof MediaRecorder === "undefined") return "audio/mp4"
-  const candidates = [
-    "audio/webm;codecs=opus",
+type RecordRTCAudioMime = "audio/webm;codecs=pcm" | "audio/webm" | "audio/ogg" | "audio/wav"
+
+function getSupportedMimeType(): RecordRTCAudioMime {
+  if (typeof MediaRecorder === "undefined") return "audio/wav"
+  const candidates: RecordRTCAudioMime[] = [
+    "audio/webm;codecs=pcm",
     "audio/webm",
-    "audio/mp4",
-    "audio/ogg;codecs=opus",
+    "audio/ogg",
   ]
   for (const type of candidates) {
     if (MediaRecorder.isTypeSupported(type)) return type
   }
-  return "audio/mp4"
+  // Safari: none of the above are supported; fall back to WAV (RecordRTC StereoAudioRecorder)
+  return "audio/wav"
 }
 
 interface RecordRTCInstance {

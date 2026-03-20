@@ -7,8 +7,26 @@ import { SessionProvider } from "next-auth/react"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Chinese Learning — E-Learning Portal",
-  description: "Homework and exercise management for teachers and students",
+  title: {
+    default: "汉语学习 · Chinese Learning",
+    template: "%s · 汉语学习",
+  },
+  description:
+    "Practice Chinese with your teacher — listen, speak, and master exercises assigned just for you.",
+  openGraph: {
+    title: "汉语学习 · Chinese Learning",
+    description:
+      "Practice Chinese with your teacher — listen, speak, and master exercises assigned just for you.",
+    type: "website",
+    locale: "en_US",
+    siteName: "汉语学习 Chinese Learning",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "汉语学习 · Chinese Learning",
+    description:
+      "Practice Chinese with your teacher — listen, speak, and master exercises assigned just for you.",
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
