@@ -1,7 +1,7 @@
 import { requireTeacher } from "@/lib/auth-helpers"
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { revalidatePath } from "next/cache"
+import { CreateClassForm } from "./CreateClassForm"
 
 export const metadata = { title: "Teacher Dashboard — EduFlow" }
 
@@ -33,14 +33,14 @@ export default async function TeacherDashboard() {
               {pendingGrading} to grade
             </span>
           )}
-          <CreateClassButton />
+          <CreateClassForm />
         </div>
       </div>
 
       {classes.length === 0 && (
         <div className="text-center py-16 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-2xl">
           <p className="text-sm text-gray-500 mb-3">No classes yet. Create your first one.</p>
-          <CreateClassButton />
+          <CreateClassForm />
         </div>
       )}
 
@@ -68,33 +68,3 @@ export default async function TeacherDashboard() {
   )
 }
 
-function CreateClassButton() {
-  async function createClass(formData: FormData) {
-    "use server"
-    const { requireTeacher } = await import("@/lib/auth-helpers")
-    const { prisma } = await import("@/lib/prisma")
-    const session = await requireTeacher()
-    const name = formData.get("name") as string
-    if (!name?.trim()) return
-    await prisma.class.create({ data: { name: name.trim(), teacherId: session.user.id } })
-    revalidatePath("/teacher")
-  }
-
-  return (
-    <form action={createClass} className="flex gap-2">
-      <input
-        name="name"
-        type="text"
-        placeholder="Class name"
-        required
-        className="w-36 text-sm px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <button
-        type="submit"
-        className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
-      >
-        Create
-      </button>
-    </form>
-  )
-}
