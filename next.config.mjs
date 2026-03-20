@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    prefetchInlining: true,
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "*.amazonaws.com" }, // AWS S3

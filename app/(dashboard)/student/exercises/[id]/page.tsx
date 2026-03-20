@@ -5,12 +5,12 @@ import { createPresignedDownloadUrl } from "@/lib/storage"
 import { McqExercise } from "@/components/exercise-types/McqExercise"
 import { FillBlankExercise } from "@/components/exercise-types/FillBlankExercise"
 import { ShortAnswerExercise } from "@/components/exercise-types/ShortAnswerExercise"
-import { AudioRecorderExercise } from "@/components/exercise-types/AudioRecorderExercise"
+import { AudioRecorderExerciseLazy as AudioRecorderExercise } from "@/components/exercise-types/AudioRecorderExerciseLazy"
+import type { AudioRecordingContent } from "@/lib/types"
 import type {
   McqContent,
   FillBlankContent,
   ShortAnswerContent,
-  AudioRecordingContent,
 } from "@/lib/types"
 
 export default async function ExercisePage({ params }: { params: Promise<{ id: string }> }) {
