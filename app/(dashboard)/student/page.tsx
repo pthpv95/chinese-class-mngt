@@ -11,10 +11,20 @@ export const metadata = { title: "My Exercises — EduFlow" }
 export default async function StudentDashboard() {
   const session = await requireStudent()
 
+  const enrollments = await prisma.classEnrollment.findMany({
+    where: { studentId: session.user.id },
+    select: { classId: true, enrolledAt: true },
+  })
+
+  const classFilters = enrollments.map((e) => ({
+    classId: e.classId,
+    createdAt: { gte: e.enrolledAt },
+  }))
+
   const exercises = await prisma.exercise.findMany({
     where: {
       published: true,
-      class: { enrollments: { some: { studentId: session.user.id } } },
+      OR: classFilters.length > 0 ? classFilters : [{ id: "" }],
     },
     include: {
       class: { select: { name: true } },
