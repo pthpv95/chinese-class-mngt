@@ -104,6 +104,10 @@ export function SubmissionReviewer({
   )
 }
 
+function isSafari() {
+  return /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)
+}
+
 function AudioPlayer({
   audioUrl,
   durationSec,
@@ -114,8 +118,12 @@ function AudioPlayer({
   const containerRef = useRef<HTMLDivElement>(null)
   const { playing, duration, currentTime, ready, togglePlay } = useAudioPlayer(
     containerRef,
-    audioUrl
+    isSafari() ? null : audioUrl
   )
+
+  if (isSafari()) {
+    return <audio controls src={audioUrl} className="w-full" />
+  }
 
   return (
     <div className="space-y-3">

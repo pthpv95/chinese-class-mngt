@@ -3,7 +3,7 @@
 import { useState, useRef, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { useAudioRecorder } from "@/hooks/useAudioRecorder"
-import { uploadAudio, formatDuration } from "@/lib/audio-upload"
+import { uploadAudio, transcodeToWav, formatDuration } from "@/lib/audio-upload"
 import type { AudioRecordingContent } from "@/lib/types"
 
 interface AudioRecorderExerciseProps {
@@ -52,7 +52,15 @@ export function AudioRecorderExercise({
     setUploading(true)
     setUploadError(null)
     try {
-      const { publicUrl } = await uploadAudio(activeBlob, exerciseId, studentId)
+      let blobToUpload = activeBlob
+      if (activeBlob.type.includes("webm") || activeBlob.type.includes("ogg")) {
+        try {
+          blobToUpload = await transcodeToWav(activeBlob)
+        } catch {
+          // fall back to original blob if transcoding fails
+        }
+      }
+      const { publicUrl } = await uploadAudio(blobToUpload, exerciseId, studentId)
       const res = await fetch("/api/submissions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

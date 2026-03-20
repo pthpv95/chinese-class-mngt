@@ -121,12 +121,6 @@ function LoginForm() {
           {isSubmitting ? "Signing in..." : "Sign in"}
         </button>
       </form>
-
-      <div className="mt-6 pt-6 border-t border-gray-100 dark:border-gray-800">
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          Demo: teacher@demo.com or alice@demo.com — password123
-        </p>
-      </div>
     </div>
   )
 }
