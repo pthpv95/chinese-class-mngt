@@ -1,0 +1,95 @@
+{
+  "common": {
+    "signIn": "Sign in",
+    "email": "Email address",
+    "password": "Password",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next"
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "welcomeMessage": "Welcome back! Ready to learn today? 🌸",
+    "emailLabel": "Email address",
+    "passwordLabel": "Password",
+    "signInButton": "Sign in",
+    "signingIn": "Signing in...",
+    "invalidEmail": "Invalid email address",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "invalidCredentials": "Invalid email or password",
+    "emailPlaceholder": "you@school.edu",
+    "passwordPlaceholder": "••••••••"
+  },
+  "teacher": {
+    "dashboard": {
+      "myClasses": "My classes",
+      "toGrade": "to grade",
+      "noClassesYet": "No classes yet. Create your first one.",
+      "createClass": "Create class"
+    },
+    "class": {
+      "students": "students",
+      "exercises": "exercises",
+      "code": "Code"
+    },
+    "exercise": {
+      "createNew": "Create new exercise",
+      "title": "Title",
+      "selectClass": "Select class",
+      "class": "Class",
+      "exerciseType": "Exercise type",
+      "multipleChoice": "Multiple choice",
+      "fillInTheBlanks": "Fill in the blanks",
+      "shortAnswer": "Short answer",
+      "audioRecording": "Audio recording",
+      "dueDate": "Due date",
+      "draft": "Draft",
+      "publish": "Publish",
+      "titlePlaceholder": "e.g. Vocabulary Quiz — Chapter 3",
+      "selectClassOption": "Select class",
+      "titleRequired": "Title is required",
+      "classRequired": "Select a class",
+      "savingDraft": "Saving draft...",
+      "publishing": "Publishing...",
+      "failedToCreate": "Failed to create"
+    }
+  },
+  "student": {
+    "dashboard": {
+      "myExercises": "My exercises",
+      "noExercises": "No exercises yet ✨ — ask your teacher for the class code to get started"
+    },
+    "exercise": {
+      "maxDuration": "Max duration:",
+      "startRecording": "Start recording",
+      "stop": "Stop",
+      "reRecord": "Re-record",
+      "orUpload": "Or upload a recording:",
+      "submit": "Submit ✓",
+      "uploading": "Uploading...",
+      "fileTooLarge": "File too large. Max 20MB.",
+      "uploadFailed": "Upload failed",
+      "submitted": "✓ Submitted",
+      "pending": "PENDING",
+      "graded": "GRADED"
+    }
+  },
+  "join": {
+    "title": "Join a class",
+    "classCode": "Class code",
+    "joinButton": "Join",
+    "joining": "Joining...",
+    "codeRequired": "Class code is required",
+    "invalidCode": "Invalid class code",
+    "alreadyEnrolled": "You're already enrolled in this class"
+  }
+}

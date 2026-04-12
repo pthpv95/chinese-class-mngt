@@ -1,6 +1,7 @@
 import { requireSession } from "@/lib/auth-helpers"
 import { signOut } from "@/auth"
 import { DashboardShell } from "@/components/ui/DashboardShell"
+import { ChatPanel } from "@/components/teacher/chat/ChatPanel"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await requireSession()
@@ -21,6 +22,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <DashboardShell email={session.user.email ?? ""} navLinks={navLinks} signOutAction={handleSignOut}>
       {children}
+      {isTeacher && <ChatPanel />}
     </DashboardShell>
   )
 }

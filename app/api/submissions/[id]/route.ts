@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getApiSession } from "@/lib/auth-helpers"
 import { GradeSubmissionSchema } from "@/lib/validations"
-import { updateTag } from "next/cache"
+import { revalidateTag } from "next/cache"
 
 export async function GET(
   _req: NextRequest,
@@ -71,9 +71,9 @@ export async function PATCH(
         gradedAt: new Date(),
       },
     })
-    updateTag(`student-exercises-${submission.studentId}`)
-    updateTag(`class-${submission.exercise.classId}`)
-    updateTag(`teacher-classes-${session.user.id}`)
+    revalidateTag(`student-exercises-${submission.studentId}`)
+    revalidateTag(`class-${submission.exercise.classId}`)
+    revalidateTag(`teacher-classes-${session.user.id}`)
     return NextResponse.json({ data: updated })
   } catch (error) {
     console.error("[PATCH /api/submissions/:id]", error)

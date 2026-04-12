@@ -56,3 +56,36 @@ export interface SubmissionListItem {
   score: number | null
   submittedAt: Date | null
 }
+
+// Chat types
+export interface ChatMessage {
+  id: string
+  role: "user" | "assistant"
+  content: string
+  imageUrls: string[]
+  toolCalls: ToolCall[] | null
+  pendingActions: PendingAction[] | null
+  createdAt: Date
+}
+
+export interface ToolCall {
+  id: string
+  name: string
+  input: Record<string, unknown>
+}
+
+export interface PendingAction {
+  toolCallId: string
+  toolName: string
+  input: Record<string, unknown>
+  executed: boolean
+  result?: unknown
+}
+
+export interface ChatConversation {
+  id: string
+  title: string | null
+  createdAt: Date
+  updatedAt: Date
+  messageCount: number
+}

@@ -6,13 +6,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useState, Suspense } from "react"
-
-const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-})
-
-type LoginForm = z.infer<typeof loginSchema>
+import { useTranslations } from "next-intl"
 
 export default function LoginPage() {
   return (
@@ -27,6 +21,14 @@ function LoginForm() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get("callbackUrl")
   const [error, setError] = useState<string | null>(null)
+  const t = useTranslations("auth")
+
+  const loginSchema = z.object({
+    email: z.string().email(t("invalidEmail")),
+    password: z.string().min(6, t("passwordTooShort")),
+  })
+
+  type LoginForm = z.infer<typeof loginSchema>
 
   const {
     register,
@@ -43,7 +45,7 @@ function LoginForm() {
     })
 
     if (result?.error) {
-      setError("Invalid email or password")
+      setError(t("invalidCredentials"))
       return
     }
 
@@ -60,9 +62,9 @@ function LoginForm() {
   return (
     <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-pink-100 dark:border-gray-800 p-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Sign in</h1>
+        <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{t("signInTitle")}</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Welcome back! Ready to learn today? 🌸
+          {t("welcomeMessage")}
         </p>
       </div>
 
@@ -72,7 +74,7 @@ function LoginForm() {
             htmlFor="email"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
           >
-            Email address
+            {t("emailLabel")}
           </label>
           <input
             {...register("email")}
@@ -80,7 +82,7 @@ function LoginForm() {
             type="email"
             autoComplete="email"
             className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder:text-pink-300 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
-            placeholder="you@school.edu"
+            placeholder={t("emailPlaceholder")}
           />
           {errors.email && (
             <p className="mt-1.5 text-xs text-red-600">{errors.email.message}</p>
@@ -92,7 +94,7 @@ function LoginForm() {
             htmlFor="password"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5"
           >
-            Password
+            {t("passwordLabel")}
           </label>
           <input
             {...register("password")}
@@ -100,7 +102,7 @@ function LoginForm() {
             type="password"
             autoComplete="current-password"
             className="w-full rounded-lg border border-pink-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3.5 py-2.5 text-sm text-gray-900 dark:text-white placeholder:text-pink-300 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent"
-            placeholder="••••••••"
+            placeholder={t("passwordPlaceholder")}
           />
           {errors.password && (
             <p className="mt-1.5 text-xs text-red-600">{errors.password.message}</p>
@@ -118,7 +120,7 @@ function LoginForm() {
           disabled={isSubmitting}
           className="w-full px-4 py-2.5 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? "Signing in..." : "Sign in"}
+          {isSubmitting ? t("signingIn") : t("signInButton")}
         </button>
       </form>
     </div>

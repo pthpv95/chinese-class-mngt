@@ -2,21 +2,27 @@ import { requireTeacher } from "@/lib/auth-helpers"
 import Link from "next/link"
 import { CreateClassForm } from "./CreateClassForm"
 import { getTeacherDashboard } from "@/lib/data"
+import { getTranslations } from "next-intl/server"
 
-export const metadata = { title: "Teacher Dashboard — EduFlow" }
+export async function generateMetadata() {
+  const t = await getTranslations("teacher.dashboard")
+  return { title: `${t("myClasses")} — EduFlow` }
+}
 
 export default async function TeacherDashboard() {
   const session = await requireTeacher()
   const { classes, pendingGrading } = await getTeacherDashboard(session.user.id)
+  const t = await getTranslations("teacher.dashboard")
+  const classT = await getTranslations("teacher.class")
 
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">My classes</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{t("myClasses")}</h2>
         <div className="flex gap-3">
           {pendingGrading > 0 && (
             <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
-              {pendingGrading} to grade
+              {pendingGrading} {t("toGrade")}
             </span>
           )}
           <CreateClassForm />
@@ -25,7 +31,7 @@ export default async function TeacherDashboard() {
 
       {classes.length === 0 && (
         <div className="text-center py-16 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-2xl">
-          <p className="text-sm text-gray-500 mb-3">No classes yet. Create your first one.</p>
+          <p className="text-sm text-gray-500 mb-3">{t("noClassesYet")}</p>
           <CreateClassForm />
         </div>
       )}
@@ -44,8 +50,8 @@ export default async function TeacherDashboard() {
               </span>
             </div>
             <div className="flex gap-4 text-xs text-gray-500">
-              <span>{cls._count.enrollments} students</span>
-              <span>{cls._count.exercises} exercises</span>
+              <span>{cls._count.enrollments} {classT("students")}</span>
+              <span>{cls._count.exercises} {classT("exercises")}</span>
             </div>
           </Link>
         ))}

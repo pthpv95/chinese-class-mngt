@@ -3,35 +3,40 @@ import Script from "next/script";
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionProvider } from "next-auth/react"
+import { NextIntlClientProvider } from "next-intl"
+import { getMessages, getLocale } from "next-intl/server"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: {
-    default: "汉语学习 · Chinese Learning",
-    template: "%s · 汉语学习",
+    default: "EduFlow · Learning Platform",
+    template: "%s · EduFlow",
   },
   description:
-    "Practice Chinese with your teacher — listen, speak, and master exercises assigned just for you.",
+    "Practice with your teacher — listen, speak, and master exercises assigned just for you.",
   openGraph: {
-    title: "汉语学习 · Chinese Learning",
+    title: "EduFlow · Learning Platform",
     description:
-      "Practice Chinese with your teacher — listen, speak, and master exercises assigned just for you.",
+      "Practice with your teacher — listen, speak, and master exercises assigned just for you.",
     type: "website",
-    locale: "en_US",
-    siteName: "汉语学习 Chinese Learning",
+    locale: "vi_VN",
+    siteName: "EduFlow",
   },
   twitter: {
     card: "summary_large_image",
-    title: "汉语学习 · Chinese Learning",
+    title: "EduFlow · Learning Platform",
     description:
-      "Practice Chinese with your teacher — listen, speak, and master exercises assigned just for you.",
+      "Practice with your teacher — listen, speak, and master exercises assigned just for you.",
   },
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale()
+  const messages = await getMessages()
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         {/* Theme init — must run before body paint to avoid flash */}
         <script
@@ -54,7 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
       </head>
       <body className={`${inter.className} bg-rose-50 dark:bg-gray-950`}>
-        <SessionProvider>{children}</SessionProvider>
+        <NextIntlClientProvider messages={messages}>
+          <SessionProvider>{children}</SessionProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

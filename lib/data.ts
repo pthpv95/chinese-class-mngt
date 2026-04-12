@@ -40,13 +40,29 @@ export async function getClassDetail(classId: string, teacherId: string) {
   })
 }
 
-export async function getStudentExercises(studentId: string) {
+export async function getStudentClasses(studentId: string) {
+  "use cache"
+  cacheTag(`student-exercises-${studentId}`)
+  cacheLife("hours")
+
+  return prisma.class.findMany({
+    where: { enrollments: { some: { studentId } } },
+    select: {
+      id: true,
+      name: true,
+      _count: { select: { exercises: { where: { published: true } } } },
+    },
+    orderBy: { name: "asc" },
+  })
+}
+
+export async function getStudentExercises(studentId: string, classId?: string) {
   "use cache"
   cacheTag(`student-exercises-${studentId}`)
   cacheLife("hours")
 
   const enrollments = await prisma.classEnrollment.findMany({
-    where: { studentId },
+    where: { studentId, ...(classId ? { classId } : {}) },
     select: { classId: true, enrolledAt: true },
   })
 

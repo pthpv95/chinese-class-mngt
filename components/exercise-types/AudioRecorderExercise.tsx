@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useAudioRecorder } from "@/hooks/useAudioRecorder"
 import { uploadAudio, transcodeToWav, formatDuration } from "@/lib/audio-upload"
 import type { AudioRecordingContent } from "@/lib/types"
+import { useTranslations } from "next-intl"
 
 interface AudioRecorderExerciseProps {
   exerciseId: string
@@ -23,6 +24,7 @@ export function AudioRecorderExercise({
 }: AudioRecorderExerciseProps) {
   const router = useRouter()
   const [, startTransition] = useTransition()
+  const t = useTranslations("student.exercise")
   const { state, durationSec, audioBlob, audioUrl, startRecording, stopRecording, reset, error } =
     useAudioRecorder(content.maxDurationSec)
 
@@ -40,7 +42,7 @@ export function AudioRecorderExercise({
     const file = e.target.files?.[0]
     if (!file) return
     if (file.size > 20 * 1024 * 1024) {
-      setUploadError("File too large. Max 20MB.")
+      setUploadError(t("fileTooLarge"))
       return
     }
     setFileBlob(file)
@@ -77,7 +79,7 @@ export function AudioRecorderExercise({
       setSubmitted(true)
       startTransition(() => router.refresh())
     } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Upload failed")
+      setUploadError(err instanceof Error ? err.message : t("uploadFailed"))
     } finally {
       setUploading(false)
     }
@@ -90,7 +92,7 @@ export function AudioRecorderExercise({
         <p className="text-sm text-gray-700 dark:text-gray-300">{content.prompt}</p>
         {playUrl && <audio controls src={playUrl} className="w-full" />}
         {submitted && !readonly && (
-          <p className="text-sm text-green-600 dark:text-green-400 font-medium">✓ Submitted</p>
+          <p className="text-sm text-green-600 dark:text-green-400 font-medium">{t("submitted")}</p>
         )}
       </div>
     )
@@ -99,7 +101,7 @@ export function AudioRecorderExercise({
   return (
     <div className="space-y-5">
       <p className="text-sm text-gray-700 dark:text-gray-300">{content.prompt}</p>
-      <p className="text-xs text-gray-400">Max duration: {formatDuration(content.maxDurationSec)}</p>
+      <p className="text-xs text-gray-400">{t("maxDuration")} {formatDuration(content.maxDurationSec)}</p>
 
       {error && <p className="text-sm text-red-500">{error}</p>}
 
@@ -111,7 +113,7 @@ export function AudioRecorderExercise({
             className="flex items-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors"
           >
             <span className="w-2.5 h-2.5 rounded-full bg-white" />
-            Start recording
+            {t("startRecording")}
           </button>
         )}
 
@@ -121,7 +123,7 @@ export function AudioRecorderExercise({
             className="flex items-center gap-2 px-4 py-2.5 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium rounded-lg transition-colors"
           >
             <span className="w-2.5 h-2.5 bg-white" />
-            Stop — {formatDuration(durationSec)}
+            {t("stop")} — {formatDuration(durationSec)}
           </button>
         )}
 
@@ -130,7 +132,7 @@ export function AudioRecorderExercise({
             onClick={reset}
             className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline"
           >
-            Re-record
+            {t("reRecord")}
           </button>
         )}
       </div>
@@ -143,7 +145,7 @@ export function AudioRecorderExercise({
       {/* File upload alternative */}
       {content.allowUpload && !activeAudioUrl && state === "idle" && (
         <div>
-          <p className="text-xs text-gray-400 mb-2">Or upload a recording:</p>
+          <p className="text-xs text-gray-400 mb-2">{t("orUpload")}</p>
           <input
             ref={fileInputRef}
             type="file"
@@ -161,7 +163,7 @@ export function AudioRecorderExercise({
           disabled={uploading}
           className="px-4 py-2.5 bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {uploading ? "Uploading..." : "Submit ✓"}
+          {uploading ? t("uploading") : t("submit")}
         </button>
       )}
 

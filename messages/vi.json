@@ -1,0 +1,95 @@
+{
+  "common": {
+    "signIn": "Đăng nhập",
+    "email": "Địa chỉ email",
+    "password": "Mật khẩu",
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "confirm": "Xác nhận",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "create": "Tạo",
+    "submit": "Gửi",
+    "back": "Quay lại",
+    "next": "Tiếp theo"
+  },
+  "auth": {
+    "signInTitle": "Đăng nhập",
+    "welcomeMessage": "Chào mừng trở lại! Sẵn sàng học hôm nay chưa? 🌸",
+    "emailLabel": "Địa chỉ email",
+    "passwordLabel": "Mật khẩu",
+    "signInButton": "Đăng nhập",
+    "signingIn": "Đang đăng nhập...",
+    "invalidEmail": "Địa chỉ email không hợp lệ",
+    "passwordTooShort": "Mật khẩu phải có ít nhất 6 ký tự",
+    "invalidCredentials": "Email hoặc mật khẩu không đúng",
+    "emailPlaceholder": "you@school.edu",
+    "passwordPlaceholder": "••••••••"
+  },
+  "teacher": {
+    "dashboard": {
+      "myClasses": "Lớp học của tôi",
+      "toGrade": "cần chấm điểm",
+      "noClassesYet": "Chưa có lớp học nào. Tạo lớp đầu tiên của bạn.",
+      "createClass": "Tạo lớp"
+    },
+    "class": {
+      "students": "học sinh",
+      "exercises": "bài tập",
+      "code": "Mã lớp"
+    },
+    "exercise": {
+      "createNew": "Tạo bài tập mới",
+      "title": "Tiêu đề",
+      "selectClass": "Chọn lớp",
+      "class": "Lớp",
+      "exerciseType": "Loại bài tập",
+      "multipleChoice": "Trắc nghiệm",
+      "fillInTheBlanks": "Điền vào chỗ trống",
+      "shortAnswer": "Trả lời ngắn",
+      "audioRecording": "Ghi âm",
+      "dueDate": "Ngày hết hạn",
+      "draft": "Bản nháp",
+      "publish": "Xuất bản",
+      "titlePlaceholder": "vd. Bài kiểm tra từ vựng — Chương 3",
+      "selectClassOption": "Chọn lớp",
+      "titleRequired": "Tiêu đề là bắt buộc",
+      "classRequired": "Chọn một lớp",
+      "savingDraft": "Đang lưu bản nháp...",
+      "publishing": "Đang xuất bản...",
+      "failedToCreate": "Không thể tạo"
+    }
+  },
+  "student": {
+    "dashboard": {
+      "myExercises": "Bài tập của tôi",
+      "noExercises": "Chưa có bài tập nào ✨ — hỏi giáo viên của bạn để lấy mã lớp và bắt đầu"
+    },
+    "exercise": {
+      "maxDuration": "Thời lượng tối đa:",
+      "startRecording": "Bắt đầu ghi âm",
+      "stop": "Dừng",
+      "reRecord": "Ghi lại",
+      "orUpload": "Hoặc tải lên bản ghi:",
+      "submit": "Gửi ✓",
+      "uploading": "Đang tải lên...",
+      "fileTooLarge": "Tệp quá lớn. Tối đa 20MB.",
+      "uploadFailed": "Tải lên thất bại",
+      "submitted": "✓ Đã gửi",
+      "pending": "CHỜ",
+      "graded": "ĐÃ CHẤM"
+    }
+  },
+  "join": {
+    "title": "Tham gia lớp",
+    "classCode": "Mã lớp",
+    "joinButton": "Tham gia",
+    "joining": "Đang tham gia...",
+    "codeRequired": "Mã lớp là bắt buộc",
+    "invalidCode": "Mã lớp không hợp lệ",
+    "alreadyEnrolled": "Bạn đã đăng ký lớp này"
+  }
+}

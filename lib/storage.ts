@@ -36,3 +36,17 @@ export async function createPresignedDownloadUrl(filePath: string): Promise<stri
   const command = new GetObjectCommand({ Bucket: BUCKET(), Key: filePath })
   return getSignedUrl(client, command, { expiresIn: 3600 })
 }
+
+/** Fetch an object from S3 and return it as a Buffer (used for image → base64) */
+export async function fetchObjectAsBuffer(filePath: string): Promise<Buffer> {
+  const client = createS3Client()
+  const command = new GetObjectCommand({ Bucket: BUCKET(), Key: filePath })
+  const response = await client.send(command)
+  const stream = response.Body
+  if (!stream) throw new Error(`Empty body for ${filePath}`)
+  const chunks: Uint8Array[] = []
+  for await (const chunk of stream as AsyncIterable<Uint8Array>) {
+    chunks.push(chunk)
+  }
+  return Buffer.concat(chunks)
+}

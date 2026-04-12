@@ -6,4 +6,5 @@ export const env = {
   get awsSecretAccessKey() { return process.env.AWS_SECRET_ACCESS_KEY ?? "" },
   get awsRegion() { return process.env.AWS_REGION ?? "us-east-1" },
   get s3Endpoint() { return process.env.S3_ENDPOINT },
+  get anthropicApiKey() { return process.env.ANTHROPIC_API_KEY ?? "" },
 } as const

@@ -61,3 +61,24 @@ export const AudioUploadSchema = z.object({
   ),
   fileSizeBytes: z.number().int().positive().max(20 * 1024 * 1024), // 20MB max
 })
+
+// Chat schemas
+export const SendMessageSchema = z.object({
+  content: z.string().min(1).max(10000),
+  imageUrls: z.array(z.string()).max(5).default([]),
+})
+
+export const ConfirmActionSchema = z.object({
+  messageId: z.string().min(1),
+  actionIndex: z.number().int().min(0),
+  editedInput: z.record(z.string(), z.unknown()).optional(),
+})
+
+export const ChatImageUploadSchema = z.object({
+  mimeType: z.enum(["image/jpeg", "image/png", "image/webp", "image/gif"]),
+  fileSizeBytes: z.number().int().positive().max(10 * 1024 * 1024), // 10MB max
+})
+
+export const CreateConversationSchema = z.object({
+  title: z.string().max(200).optional(),
+})
